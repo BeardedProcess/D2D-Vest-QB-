@@ -1,22 +1,14 @@
-ESX = nil
+local QBCore = exports['qb-core']:GetCoreObject()
 
 local beep = false
 local detonate = false
 local beepdone = false
 
-Citizen.CreateThread(function()
-    while ESX == nil do
-        TriggerEvent('esx:getSharedObject', function(obj)
-        ESX = obj
-        end)
-    end
-end)
-
 RegisterNetEvent('D2D-Vest:Use')
 AddEventHandler('D2D-Vest:Use', function()
     local player = PlayerPedId()
     
-    ESX.Streaming.RequestAnimDict('clothingtie', function()
+    RequestAnimDict('clothingtie')
     TaskPlayAnim(PlayerPedId(), 'clothingtie', 'try_tie_negative_a', 8.0, 2.0, 1200, 48, 10, 0, 0, 0)
     
     Citizen.Wait(200)
@@ -29,7 +21,7 @@ AddEventHandler('D2D-Vest:Use', function()
     
     Citizen.Wait(500)
     TriggerEvent('D2D-Vest:Detonate')
-    ESX.ShowNotification('Bomb has been armed!')
+    QBCore.Functions.Notify('Bomb has been armed!', 'success', 3000)
     detonate = true
 
 end)
@@ -39,7 +31,7 @@ RegisterNetEvent('D2D-Vest:Defuse')
 AddEventHandler('D2D-Vest:Defuse', function()
     local player = PlayerPedId()
     
-    ESX.Streaming.RequestAnimDict('clothingtie', function()
+    RequestAnimDict('clothingtie')
     TaskPlayAnim(PlayerPedId(), 'clothingtie', 'try_tie_negative_a', 8.0, 2.0, 1200, 48, 10, 0, 0, 0)
     
     Citizen.Wait(200)
@@ -50,9 +42,7 @@ AddEventHandler('D2D-Vest:Defuse', function()
    
     beep = false
     detonate = false
-    ESX.ShowNotification('Bomb has been defused!')
-
-
+    QBCore.Functions.Notify('Bomb has been defused!', 'success', 3000)
 end)
 end)
 
